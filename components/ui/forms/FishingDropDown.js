@@ -30,7 +30,7 @@ export default FishingDropDown = (props) => {
           arrowicon={<ChevronIcon />}
           boxStyles={{
             margin: 5,
-            borderRadius: 100,
+            borderRadius: 40,
             borderColor: "#68C4B6",
             borderWidth: 2,
           }}

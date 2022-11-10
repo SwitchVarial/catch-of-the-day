@@ -42,7 +42,7 @@ const styles = StyleSheet.create({
   },
   buttonContainerStyle: {
     margin: 5,
-    borderRadius: 100,
+    borderRadius: 40,
     borderColor: "#68C4B6",
     borderWidth: 2,
   },

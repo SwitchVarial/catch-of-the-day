@@ -1,11 +1,9 @@
 import React from "react";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-import { createNativeStackNavigator } from "@react-navigation/native-stack";
-import { NavigationContainer } from "@react-navigation/native";
 import HomeScreen from "../../screens/HomeScreen";
 import ProfileScreen from "../../screens/ProfileScreen";
-import StartFishing from "../../screens/StartFishing";
 import Icon from "../icons/Icon";
+import TrackingNavigation from "./TrackingNavigation";
 
 const screenOptions = ({ route }) => ({
   headerShown: false,
@@ -57,51 +55,28 @@ const screenOptions = ({ route }) => ({
 
 const Tab = createBottomTabNavigator();
 
-const Stack = createNativeStackNavigator();
-
-function FishingStackScreen() {
-  return (
-    <Stack.Navigator>
-      <Stack.Screen
-        name="Start Fishing"
-        component={StartFishing}
-        options={{
-          headerStyle: {
-            backgroundColor: "#0B3553",
-          },
-          headerTitleStyle: {
-            fontWeight: "bold",
-            color: "#68C4B6",
-          },
-        }}
-      />
-    </Stack.Navigator>
-  );
-}
-
 export default function BottomNavigation() {
   return (
-    <NavigationContainer>
-      <Tab.Navigator screenOptions={screenOptions}>
-        <Tab.Screen
-          options={{ tabBarLabelStyle: { color: "white" } }}
-          name="Home"
-          component={HomeScreen}
-        />
-        <Tab.Screen
-          options={{
-            tabBarLabelStyle: { color: "white" },
-            title: "Start Fishing",
-          }}
-          name="StartFishing"
-          component={FishingStackScreen}
-        />
-        <Tab.Screen
-          options={{ tabBarLabelStyle: { color: "white" } }}
-          name="Profile"
-          component={ProfileScreen}
-        />
-      </Tab.Navigator>
-    </NavigationContainer>
+    <Tab.Navigator screenOptions={screenOptions}>
+      <Tab.Screen
+        options={{ tabBarLabelStyle: { color: "white" } }}
+        name="Home"
+        component={HomeScreen}
+      />
+      <Tab.Screen
+        options={{
+          tabBarLabelStyle: { color: "white" },
+          title: "Start Fishing",
+          tabBarStyle: { display: "none" },
+        }}
+        name="StartFishing"
+        component={TrackingNavigation}
+      />
+      <Tab.Screen
+        options={{ tabBarLabelStyle: { color: "white" } }}
+        name="Profile"
+        component={ProfileScreen}
+      />
+    </Tab.Navigator>
   );
 }

@@ -1,14 +1,13 @@
 import React, { useEffect, useState } from "react";
 import { StatusBar } from "expo-status-bar";
 import { StyleSheet, Text, View } from "react-native";
-import { SafeAreaProvider } from "react-native-safe-area-context";
 import MapView, { Marker } from "react-native-maps";
 import * as Location from "expo-location";
 import PrimaryButton from "../ui/buttons/PrimaryButton";
 import { useNavigation } from "@react-navigation/native";
 import FishingDropDown from "../ui/forms/FishingDropDown";
 
-export default function HomeScreen() {
+export default function StartFishing({ navigation }) {
   const delta = 0.05;
   const initialDelta = 8;
   const [title, setTitle] = useState("My Home");
@@ -62,23 +61,19 @@ export default function HomeScreen() {
     onPress: () => navigation.navigate("StartFishing"),
   };
 
-  const navigation = useNavigation();
-
   return (
-    <SafeAreaProvider>
-      <View style={styles.container}>
-        <StatusBar style="auto" />
-        <MapView style={styles.map} region={region} initialRegion={region}>
-          <Marker coordinate={region} title={title} />
-        </MapView>
-        <View style={styles.actionsContainer}>
-          <View style={styles.buttonContainer}>
-            <FishingDropDown {...dropDownProps} />
-            <PrimaryButton {...primaryButtonProps} />
-          </View>
+    <View style={styles.container}>
+      <StatusBar style="auto" />
+      <MapView style={styles.map} region={region} initialRegion={region}>
+        <Marker coordinate={region} title={title} />
+      </MapView>
+      <View style={styles.actionsContainer}>
+        <View style={styles.buttonContainer}>
+          <FishingDropDown {...dropDownProps} />
+          <PrimaryButton {...primaryButtonProps} />
         </View>
       </View>
-    </SafeAreaProvider>
+    </View>
   );
 }
 
@@ -88,7 +83,7 @@ const styles = StyleSheet.create({
     backgroundColor: "#174667",
     alignItems: "center",
     justifyContent: "flex-start",
-    paddingBottom: 95,
+    paddingBottom: 20,
   },
   map: {
     flex: 2,
