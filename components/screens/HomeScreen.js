@@ -4,12 +4,10 @@ import { StyleSheet, View } from "react-native";
 import PrimaryButton from "../ui/buttons/PrimaryButton";
 import SecondaryButton from "../ui/buttons/SecondaryButton";
 
-export default function HomeScreen({ navigation, route }) {
-  const [isTracking, setIsTracking] = useState(false);
-
+export default function HomeScreen({ navigation }) {
   const primaryButtonProps = {
     title: "Start Fishing",
-    onPress: () => navigation.navigate("StartFishing", { isTracking }),
+    onPress: () => navigation.navigate("StartFishing"),
   };
 
   const secondaryButtonProps = {

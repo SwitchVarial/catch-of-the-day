@@ -6,7 +6,7 @@ import * as Location from "expo-location";
 import PrimaryButton from "../ui/buttons/PrimaryButton";
 import FishingDropDown from "../ui/forms/FishingDropDown";
 
-export default function StartFishing({ navigation, route }) {
+export default function StartFishing({ navigation }) {
   const delta = 0.05;
   const initialDelta = 8;
   const [title, setTitle] = useState("My Home");
@@ -55,14 +55,9 @@ export default function StartFishing({ navigation, route }) {
     getLocation();
   }, []);
 
-  const startTracking = () => {
-    setIsTracking(true);
-    navigation.navigate("Fishing", { region, selected, isTracking });
-  };
-
   const primaryButtonProps = {
     title: "Start",
-    onPress: () => startTracking(),
+    onPress: () => navigation.navigate("Fishing", { region, selected }),
   };
 
   return (

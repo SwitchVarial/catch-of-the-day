@@ -27,13 +27,6 @@ export default function Fishing({ navigation, route }) {
     alert(latitude + " " + longitude);
   };
 
-  const stopTracking = () => {
-    if (isTracking == true) {
-      alert("Are you sure?");
-      navigation.navigate("Home");
-    }
-  };
-
   const primaryButtonProps = {
     title: "I Got A Fish",
     onPress: () => getFishLocation(),
@@ -41,7 +34,7 @@ export default function Fishing({ navigation, route }) {
 
   const secondaryButtonProps = {
     title: "Stop",
-    onPress: () => stopTracking(),
+    onPress: () => navigation.navigate("Home"),
   };
   return (
     <View style={styles.container}>

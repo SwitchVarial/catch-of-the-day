@@ -3,7 +3,7 @@ import { StyleSheet, Text, View } from "react-native";
 import PrimaryButton from "../ui/buttons/PrimaryButton";
 import HomeIcon from "../ui/icons/HomeIcon";
 
-export default function ProfileScreen({ navigation, route }) {
+export default function ProfileScreen({ navigation }) {
   const buttonProps = {
     title: "Profile",
     onPress: () => alert("This is Profile"),
