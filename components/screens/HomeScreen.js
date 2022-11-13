@@ -1,12 +1,15 @@
+import React, { useState } from "react";
 import { StatusBar } from "expo-status-bar";
 import { StyleSheet, View } from "react-native";
 import PrimaryButton from "../ui/buttons/PrimaryButton";
 import SecondaryButton from "../ui/buttons/SecondaryButton";
 
-export default function HomeScreen({ navigation }) {
+export default function HomeScreen({ navigation, route }) {
+  const [isTracking, setIsTracking] = useState(false);
+
   const primaryButtonProps = {
     title: "Start Fishing",
-    onPress: () => navigation.navigate("StartFishing"),
+    onPress: () => navigation.navigate("StartFishing", { isTracking }),
   };
 
   const secondaryButtonProps = {

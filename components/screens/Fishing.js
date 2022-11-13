@@ -1,38 +1,16 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { StatusBar } from "expo-status-bar";
 import { StyleSheet, View } from "react-native";
 import MapView, { Marker } from "react-native-maps";
 import * as Location from "expo-location";
 import PrimaryButton from "../ui/buttons/PrimaryButton";
-import FishingDropDown from "../ui/forms/FishingDropDown";
+import SecondaryButton from "../ui/buttons/SecondaryButton";
 
-export default function StartFishing({ navigation, route }) {
-  const delta = 0.05;
-  const initialDelta = 8;
-  const [title, setTitle] = useState("My Home");
-  const [region, setRegion] = useState({
-    latitude: 61.92,
-    longitude: 25.74,
-    latitudeDelta: initialDelta,
-    longitudeDelta: initialDelta,
-  });
+export default function Fishing({ navigation, route }) {
+  const { region } = route.params;
+  const [fishLocation, setFishLocation] = useState();
 
-  const data = [
-    { value: "Trolling", key: "1" },
-    { value: "Casting", key: "2" },
-    { value: "Fly fishing", key: "3" },
-    { value: "Bait fishing", key: "4" },
-  ];
-
-  const [selected, setSelected] = useState("");
-
-  const dropDownProps = {
-    onSelect: () => alert(selected),
-    data: data,
-    setSelected: setSelected,
-  };
-
-  const getLocation = async () => {
+  const getFishLocation = async () => {
     let { status } = await Location.requestForegroundPermissionsAsync();
     if (status !== "granted") {
       Alert.alert("No permission to get location");
@@ -42,39 +20,39 @@ export default function StartFishing({ navigation, route }) {
       accuracy: Location.Accuracy.High,
     });
     const { latitude, longitude } = location.coords;
-    setTitle("You are here");
-    setRegion({
+    setFishLocation({
       latitude: latitude,
       longitude: longitude,
-      latitudeDelta: delta,
-      longitudeDelta: delta,
     });
+    alert(latitude + " " + longitude);
   };
 
-  useEffect(() => {
-    getLocation();
-  }, []);
-
-  const startTracking = () => {
-    setIsTracking(true);
-    navigation.navigate("Fishing", { region, selected, isTracking });
+  const stopTracking = () => {
+    if (isTracking == true) {
+      alert("Are you sure?");
+      navigation.navigate("Home");
+    }
   };
 
   const primaryButtonProps = {
-    title: "Start",
-    onPress: () => startTracking(),
+    title: "I Got A Fish",
+    onPress: () => getFishLocation(),
   };
 
+  const secondaryButtonProps = {
+    title: "Stop",
+    onPress: () => stopTracking(),
+  };
   return (
     <View style={styles.container}>
       <StatusBar style="auto" />
       <MapView style={styles.map} region={region} initialRegion={region}>
-        <Marker coordinate={region} title={title} />
+        <Marker coordinate={region} title="Start" />
       </MapView>
       <View style={styles.actionsContainer}>
         <View style={styles.buttonContainer}>
-          <FishingDropDown {...dropDownProps} />
           <PrimaryButton {...primaryButtonProps} />
+          <SecondaryButton {...secondaryButtonProps} />
         </View>
       </View>
     </View>

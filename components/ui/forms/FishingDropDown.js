@@ -33,9 +33,10 @@ export default FishingDropDown = (props) => {
             borderRadius: 40,
             borderColor: "#68C4B6",
             borderWidth: 2,
+            alignItems: "center",
+            justifyContent: "space-between",
           }}
           inputStyles={{
-            marginHorizontal: 5,
             color: "#68C4B6",
             fontFamily: "MPLUSRounded1c_800ExtraBold",
             textTransform: "uppercase",
