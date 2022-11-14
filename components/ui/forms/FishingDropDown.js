@@ -26,6 +26,8 @@ export default FishingDropDown = (props) => {
       <View style={{ width: "90%" }}>
         <DropDown
           {...dropdownProps}
+          maxHeight="300"
+          placeholder="Fishing type"
           search={false}
           arrowicon={<ChevronIcon />}
           boxStyles={{
@@ -54,8 +56,6 @@ export default FishingDropDown = (props) => {
             fontFamily: "MPLUSRounded1c_500Medium",
             fontSize: 18,
           }}
-          maxHeight="300"
-          placeHolder="Select fishing type"
         />
       </View>
     );

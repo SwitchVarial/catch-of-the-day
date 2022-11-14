@@ -5,6 +5,32 @@ import MapView, { Marker } from "react-native-maps";
 import * as Location from "expo-location";
 import PrimaryButton from "../ui/buttons/PrimaryButton";
 import FishingDropDown from "../ui/forms/FishingDropDown";
+import { initializeApp } from "firebase/app";
+import {
+  FIREBASE_API_KEY,
+  FIREBASE_AUTH_DOMAIN,
+  FIREBASE_DATABASE_URL,
+  FIREBASE_PROJECT_ID,
+  FIREBASE_STORAGE_BUCKET,
+  FIREBASE_MESSAGIN_SENDER_ID,
+  FIREBASE_APP_ID,
+} from "@env";
+import { getDatabase, push, ref } from "firebase/database";
+
+// Your web app's Firebase configuration
+const firebaseConfig = {
+  apiKey: FIREBASE_API_KEY,
+  authDomain: FIREBASE_AUTH_DOMAIN,
+  databaseURL: FIREBASE_DATABASE_URL,
+  projectId: FIREBASE_PROJECT_ID,
+  storageBucket: FIREBASE_STORAGE_BUCKET,
+  messagingSenderId: FIREBASE_MESSAGIN_SENDER_ID,
+  appId: FIREBASE_APP_ID,
+};
+
+// Initialize Firebase
+const app = initializeApp(firebaseConfig);
+const database = getDatabase(app);
 
 export default function StartFishing({ navigation }) {
   const delta = 0.05;
@@ -18,16 +44,15 @@ export default function StartFishing({ navigation }) {
   });
 
   const data = [
-    { value: "Trolling", key: "1" },
-    { value: "Casting", key: "2" },
-    { value: "Fly fishing", key: "3" },
-    { value: "Bait fishing", key: "4" },
+    { value: "Trolling", key: "Trolling" },
+    { value: "Casting", key: "Casting" },
+    { value: "Fly fishing", key: "Fly fishing" },
+    { value: "Bait fishing", key: "Bait fishing" },
   ];
 
   const [selected, setSelected] = useState("");
 
   const dropDownProps = {
-    onSelect: () => alert(selected),
     data: data,
     setSelected: setSelected,
   };
@@ -51,14 +76,30 @@ export default function StartFishing({ navigation }) {
     });
   };
 
-  useEffect(() => {
-    getLocation();
-  }, []);
+  const startFishing = async () => {
+    if (selected == "") {
+      alert("Select fishing type to start fishing");
+    } else {
+      const tripKey = push(ref(database, "/fishing-trips"), {
+        startLocation: {
+          latitude: region.latitude,
+          longitude: region.longitude,
+        },
+        startTime: Date.now(),
+        fishingType: selected,
+      }).key;
+      navigation.navigate("Fishing", { region, tripKey });
+    }
+  };
 
   const primaryButtonProps = {
     title: "Start",
-    onPress: () => navigation.navigate("Fishing", { region, selected }),
+    onPress: () => startFishing(),
   };
+
+  useEffect(() => {
+    getLocation();
+  }, []);
 
   return (
     <View style={styles.container}>
