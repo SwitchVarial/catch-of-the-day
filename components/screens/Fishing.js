@@ -7,8 +7,6 @@ import PrimaryButton from "../ui/buttons/PrimaryButton";
 import SecondaryButton from "../ui/buttons/SecondaryButton";
 import { initializeApp } from "firebase/app";
 import {
-  GOOGLE_API_KEY,
-  GOOGLE_GEOCODING_API_URL,
   FIREBASE_API_KEY,
   FIREBASE_AUTH_DOMAIN,
   FIREBASE_DATABASE_URL,
@@ -56,24 +54,21 @@ export default function Fishing({ navigation, route }) {
     longitudeDelta: region.longitudeDelta,
   });
 
-  const getFishLocation = async () => {
-    let { status } = await Location.requestForegroundPermissionsAsync();
-    if (status !== "granted") {
-      Alert.alert("No permission to get location");
-      return;
-    }
-    let location = await Location.getCurrentPositionAsync({
-      accuracy: Location.Accuracy.High,
-    });
-    const { latitude, longitude } = location.coords;
-    addFish(latitude, longitude);
+  const primaryButtonProps = {
+    title: "I Got A Fish",
+    onPress: () => addFish(),
   };
 
-  const addFish = (latitude, longitude) => {
+  const secondaryButtonProps = {
+    title: "Stop",
+    onPress: () => stopTracking(),
+  };
+
+  const addFish = () => {
     push(ref(database, "/fishing-trips/" + tripKey + "/fish"), {
       catchLocation: {
-        latitude: latitude,
-        longitude: longitude,
+        latitude: currentLocation.latitude,
+        longitude: currentLocation.longitude,
       },
       catchTime: Date.now(),
     });
@@ -97,17 +92,8 @@ export default function Fishing({ navigation, route }) {
     });
   };
 
-  const primaryButtonProps = {
-    title: "I Got A Fish",
-    onPress: () => getFishLocation(),
-  };
-
   const stopTracking = () => {
     navigation.navigate("Home"), navigation.push("Start Fishing");
-  };
-  const secondaryButtonProps = {
-    title: "Stop",
-    onPress: () => stopTracking(),
   };
 
   useEffect(() => {
