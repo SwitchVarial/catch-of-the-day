@@ -16,6 +16,7 @@ import {
   FIREBASE_APP_ID,
 } from "@env";
 import { getDatabase, push, ref } from "firebase/database";
+import { saveTrip } from "../utils/firebase";
 
 // Your web app's Firebase configuration
 const firebaseConfig = {
@@ -41,6 +42,7 @@ export default function StartFishing({ navigation }) {
     longitude: 25.74,
     latitudeDelta: initialDelta,
     longitudeDelta: initialDelta,
+    accuracy: null,
   });
 
   const data = [
@@ -67,39 +69,49 @@ export default function StartFishing({ navigation }) {
       accuracy: Location.Accuracy.High,
     });
     const { latitude, longitude } = location.coords;
+    const { accuracy } = location.coords;
     setTitle("You are here");
     setRegion({
       latitude: latitude,
       longitude: longitude,
       latitudeDelta: delta,
       longitudeDelta: delta,
+      accuracy: accuracy,
     });
   };
 
   const startFishing = async () => {
-    if (selected == "") {
-      alert("Select fishing type to start fishing");
+    const startTime = Date.now();
+    const tripKey = push(ref(database, "/fishing-trips"), {
+      startLocation: region,
+      startTime: startTime,
+      fishingType: selected,
+    }).key;
+    navigation.navigate("Fishing", { region, tripKey });
+  };
+
+  const disableButton = () => {
+    const { accuracy } = region;
+    if (accuracy === null || selected == "") {
+      return true;
     } else {
-      const tripKey = push(ref(database, "/fishing-trips"), {
-        startLocation: {
-          latitude: region.latitude,
-          longitude: region.longitude,
-        },
-        startTime: Date.now(),
-        fishingType: selected,
-      }).key;
-      navigation.navigate("Fishing", { region, tripKey });
+      return false;
     }
   };
 
   const primaryButtonProps = {
     title: "Start",
+    disabled: disableButton(),
     onPress: () => startFishing(),
   };
 
   useEffect(() => {
     getLocation();
   }, []);
+
+  useEffect(() => {
+    disableButton();
+  }, [region]);
 
   return (
     <View style={styles.container}>

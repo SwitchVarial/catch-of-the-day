@@ -14,6 +14,9 @@ export default PrimaryButton = (props) => {
     containerStyle: styles.buttonContainerStyle,
     titleStyle: styles.buttonTitle,
     onPress: props.onPress,
+    disabled: props.disabled,
+    disabledStyle: styles.buttonDisabledStyle,
+    disabledTitleStyle: styles.buttonDisabledTitleStyle,
   };
 
   let [fontsLoaded] = useFonts({
@@ -32,6 +35,7 @@ const styles = StyleSheet.create({
     minWidth: "90%",
     alignItems: "center",
     justifyContent: "center",
+    padding: 12,
   },
   buttonTitle: {
     marginHorizontal: 5,
@@ -43,7 +47,11 @@ const styles = StyleSheet.create({
   buttonContainerStyle: {
     margin: 5,
     borderRadius: 40,
-    borderColor: "#FFA700",
-    borderWidth: 2,
+  },
+  buttonDisabledStyle: {
+    backgroundColor: "#98732D",
+  },
+  buttonDisabledTitleStyle: {
+    color: "#0B3553",
   },
 });
