@@ -2,7 +2,6 @@ import React, { useEffect, useState } from "react";
 import { StatusBar } from "expo-status-bar";
 import { View } from "react-native";
 import MapView, { Marker } from "react-native-maps";
-import * as Location from "expo-location";
 import PrimaryButton from "../ui/buttons/PrimaryButton";
 import FishingDropDown from "../ui/forms/FishingDropDown";
 import { database } from "../utils/FireBaseConfig";

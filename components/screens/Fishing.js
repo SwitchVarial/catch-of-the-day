@@ -36,9 +36,9 @@ export default function Fishing({ navigation, route }) {
   const [currentLocation, setCurrentLocation] = useState(startLocation);
 
   // Add fish and save data to realtime database
-  const addFish = () => {
+  const addFish = async () => {
     setFishCount(fishCount + 1);
-    push(ref(database, "/fishing-trips/" + tripKey + "/fish"), {
+    await push(ref(database, "/fishing-trips/" + tripKey + "/fish"), {
       catchLocation: {
         latitude: currentLocation.latitude,
         longitude: currentLocation.longitude,

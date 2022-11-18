@@ -37,6 +37,26 @@ export const trackingStyles = StyleSheet.create({
   },
 });
 
+export const homeProfileStyles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: "#174667",
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  actionsContainer: {
+    flex: 2,
+    alignItems: "center",
+    justifyContent: "flex-end",
+  },
+  listContainer: {
+    flex: 3,
+    width: "100%",
+    alignItems: "center",
+    justifyContent: "flex-start",
+  },
+});
+
 export const stopwatchOptions = {
   container: {
     padding: 0,

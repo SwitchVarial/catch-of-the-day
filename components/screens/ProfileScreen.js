@@ -2,6 +2,7 @@ import { StatusBar } from "expo-status-bar";
 import { StyleSheet, Text, View } from "react-native";
 import PrimaryButton from "../ui/buttons/PrimaryButton";
 import HomeIcon from "../ui/icons/HomeIcon";
+import { homeProfileStyles } from "./Styles";
 
 export default function ProfileScreen({ navigation }) {
   const buttonProps = {
@@ -10,7 +11,7 @@ export default function ProfileScreen({ navigation }) {
   };
 
   return (
-    <View style={styles.container}>
+    <View style={homeProfileStyles.container}>
       <Text>This is ProfileScreen</Text>
       <PrimaryButton {...buttonProps} />
       <HomeIcon />
@@ -18,12 +19,3 @@ export default function ProfileScreen({ navigation }) {
     </View>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: "#174667",
-    alignItems: "center",
-    justifyContent: "center",
-  },
-});

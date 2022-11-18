@@ -1,34 +1,66 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { StatusBar } from "expo-status-bar";
-import { StyleSheet, View } from "react-native";
+import { FlatList, StyleSheet, View, ScrollView } from "react-native";
 import PrimaryButton from "../ui/buttons/PrimaryButton";
-import SecondaryButton from "../ui/buttons/SecondaryButton";
+import { database } from "../utils/FireBaseConfig";
+import { ref, onValue } from "firebase/database";
+import { homeProfileStyles } from "./Styles";
+import { ListItem } from "@rneui/base";
 
 export default function HomeScreen({ navigation }) {
-  const primaryButtonProps = {
+  // All needed useStates
+  const [tripsData, setTripsData] = useState([]);
+
+  // Props for start button
+  const startButtonProps = {
     title: "Start Fishing",
     onPress: () => navigation.navigate("StartFishing"),
   };
 
-  const secondaryButtonProps = {
-    title: "Secondary Button",
-    onPress: () => alert("This is Home"),
-  };
+  const renderItem = ({ item }) => (
+    <ListItem bottomDivider>
+      <ListItem.Content>
+        <View>
+          <ListItem.Title>{item.fishingType}</ListItem.Title>
+        </View>
+      </ListItem.Content>
+    </ListItem>
+  );
+
+  // Use effect get fishing trip data from realtime database
+  useEffect(() => {
+    const itemsRef = ref(database, "/fishing-trips");
+    onValue(itemsRef, (snapshot) => {
+      const data = snapshot.val();
+      const fishingTrips = data
+        ? Object.keys(data).map((key) => ({ key, ...data[key] }))
+        : [];
+      setTripsData(fishingTrips);
+    });
+  }, []);
 
   return (
-    <View style={styles.container}>
-      <PrimaryButton {...primaryButtonProps} />
-      <SecondaryButton {...secondaryButtonProps} />
+    <View style={homeProfileStyles.container}>
       <StatusBar style="auto" />
+      <View style={homeProfileStyles.actionsContainer}>
+        <PrimaryButton {...startButtonProps} />
+      </View>
+      <View style={homeProfileStyles.listContainer}>
+        <FlatList
+          style={styles.list}
+          data={tripsData}
+          renderItem={renderItem}
+          nestedScrollEnabled
+        />
+      </View>
     </View>
   );
 }
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: "#174667",
-    alignItems: "center",
-    justifyContent: "center",
+  list: {
+    width: "100%",
+    height: 2000,
+    marginTop: 20,
   },
 });
