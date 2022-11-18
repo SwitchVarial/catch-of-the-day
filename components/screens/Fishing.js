@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { StatusBar } from "expo-status-bar";
-import { StyleSheet, View, Image } from "react-native";
+import { View, Image } from "react-native";
 import MapView, { Marker } from "react-native-maps";
 import * as Location from "expo-location";
 import PrimaryButton from "../ui/buttons/PrimaryButton";
@@ -16,33 +16,27 @@ import InfoText from "../ui/texts/InfoText";
 import { database } from "../utils/FireBaseConfig";
 import FishButton from "../../assets/FishButton.png";
 import StartIcon from "../../assets/StartIcon.png";
+import { trackingStyles, stopwatchOptions } from "./Styles";
+import { getCurrentLocation } from "../utils/Location";
 
 export default function Fishing({ navigation, route }) {
-  const { region } = route.params;
-  const { tripKey } = route.params;
-  const [currentLocation, setCurrentLocation] = useState({
-    latitude: region.latitude,
-    longitude: region.longitude,
-    latitudeDelta: region.latitudeDelta,
-    longitudeDelta: region.longitudeDelta,
-    accuracy: null,
-  });
+  // Data from route
+  let startLocation;
+  let tripKey;
+  if (route.params !== undefined) {
+    startLocation = route.params.startLocation;
+    tripKey = route.params.tripKey;
+  }
+
+  // All needed useStates
   const [isStopwatchStart, setIsStopwatchStart] = useState(true);
   const [resetStopwatch, setResetStopwatch] = useState(false);
   const [fishCount, setFishCount] = useState(0);
   const [tripData, setTripData] = useState([]);
   const [fishData, setFishData] = useState([]);
+  const [currentLocation, setCurrentLocation] = useState(startLocation);
 
-  const primaryButtonProps = {
-    title: "I Got A Fish",
-    onPress: () => addFish(),
-  };
-
-  const secondaryButtonProps = {
-    title: "Stop",
-    onPress: () => stopTracking(),
-  };
-
+  // Add fish and save data to realtime database
   const addFish = () => {
     setFishCount(fishCount + 1);
     push(ref(database, "/fishing-trips/" + tripKey + "/fish"), {
@@ -54,6 +48,9 @@ export default function Fishing({ navigation, route }) {
     });
   };
 
+  console.log("Fishing tripKey: " + tripKey);
+
+  // Get current location TODO: make component
   const getCurrentLocation = async () => {
     let { status } = await Location.requestForegroundPermissionsAsync();
     if (status !== "granted") {
@@ -74,18 +71,35 @@ export default function Fishing({ navigation, route }) {
     });
   };
 
+  /*   const getLocation = async () => {
+    const location = await getCurrentLocation();
+    setCurrentLocation(location);
+  }; */
+
+  // Stop tracking and go to save fishint trip screen
   const stopTracking = () => {
+    setIsStopwatchStart(false);
+    setResetStopwatch(true);
     navigation.navigate("Save Fishing", {
       tripData,
       fishData,
       fishCount,
       currentLocation,
+      tripKey,
     });
-    setIsStopwatchStart(false);
-    setResetStopwatch(true);
-    setFishCount(0);
   };
 
+  // Props for I got a fish button and stop button
+  const addFishButtonProps = {
+    title: "I Got A Fish",
+    onPress: () => addFish(),
+  };
+  const stopButtonProps = {
+    title: "Stop",
+    onPress: () => stopTracking(),
+  };
+
+  // Use effect for current location
   useEffect(() => {
     const interval = setInterval(() => {
       getCurrentLocation();
@@ -93,11 +107,14 @@ export default function Fishing({ navigation, route }) {
     return () => clearInterval(interval);
   }, []);
 
+  // Use effect for stopwatch and setting fish count to zero
   useEffect(() => {
     setIsStopwatchStart(true);
     setResetStopwatch(false);
+    setFishCount(0);
   }, []);
 
+  // Use effect get fishing trip data from realtime database
   useEffect(() => {
     const itemsRef = ref(database, "/fishing-trips/" + tripKey);
     onValue(itemsRef, (snapshot) => {
@@ -110,16 +127,14 @@ export default function Fishing({ navigation, route }) {
     });
   }, []);
 
+  // Use effect set fish data
   useEffect(() => {
-    const itemsRef = ref(database, "/fishing-trips/" + tripKey + "/fish");
-    onValue(itemsRef, (snapshot) => {
-      const data = snapshot.val();
-      const fish = data
-        ? Object.keys(data).map((key) => ({ key, ...data[key] }))
-        : [];
-      setFishData(fish);
-    });
-  }, []);
+    const data = tripData.fish;
+    const fish = data
+      ? Object.keys(data).map((key) => ({ key, ...data[key] }))
+      : [];
+    setFishData(fish);
+  }, [tripData]);
 
   let [fontsLoaded] = useFonts({
     MPLUSRounded1c_800ExtraBold,
@@ -128,111 +143,60 @@ export default function Fishing({ navigation, route }) {
     return;
   } else {
     return (
-      <View style={styles.container}>
+      <View style={trackingStyles.container}>
         <StatusBar style="auto" />
         <MapView
-          style={styles.map}
+          style={trackingStyles.map}
           region={currentLocation}
           initialRegion={currentLocation}
         >
-          <Marker coordinate={tripData.startLocation} title="Start">
-            <Image source={StartIcon} style={{ height: 20, width: 20 }} />
-          </Marker>
-          {fishData.map((value, index) => {
-            return (
-              <Marker
-                coordinate={value.catchLocation}
-                key={index}
-                title={
-                  "Fish No." +
-                  (index + 1) +
-                  " caught at " +
-                  new Date(value.catchTime).toLocaleString("en-US", {
-                    timeStyle: "short",
-                  })
-                }
-              >
-                <Image source={FishButton} style={{ height: 40, width: 40 }} />
-              </Marker>
-            );
-          })}
+          {tripData.startLocation !== undefined ? (
+            <Marker coordinate={tripData.startLocation} title="Start">
+              <Image source={StartIcon} />
+            </Marker>
+          ) : null}
+          {fishData
+            ? fishData.map((value, index) => {
+                return (
+                  <Marker
+                    coordinate={value.catchLocation}
+                    key={index}
+                    title={
+                      "Fish No." +
+                      (index + 1) +
+                      " caught at " +
+                      new Date(value.catchTime).toLocaleString("en-US", {
+                        timeStyle: "short",
+                      })
+                    }
+                  >
+                    <Image source={FishButton} />
+                  </Marker>
+                );
+              })
+            : null}
         </MapView>
-        <View style={styles.rowContainer}>
-          <View style={styles.infoContainer}>
+        <View style={trackingStyles.rowContainer}>
+          <View style={trackingStyles.infoContainer}>
             <InfoText label={fishCount} />
             <LabelText label="Fish caught" />
           </View>
-          <View style={styles.infoContainer}>
+          <View style={trackingStyles.infoContainer}>
             <Stopwatch
               start={isStopwatchStart}
-              //To start
               reset={resetStopwatch}
-              //To reset
-              options={options}
-              //options for the styling
+              options={stopwatchOptions}
             />
             <LabelText label="Duration" />
           </View>
         </View>
-        <View style={styles.actionsContainer}>
-          <View style={styles.buttonContainer}>
-            <PrimaryButton {...primaryButtonProps} />
-            <SecondaryButton {...secondaryButtonProps} />
+        <View style={trackingStyles.actionsContainer}>
+          <View style={trackingStyles.buttonContainer}>
+            <PrimaryButton {...addFishButtonProps} />
+            <SecondaryButton {...stopButtonProps} />
           </View>
         </View>
       </View>
     );
   }
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: "#174667",
-    alignItems: "center",
-    justifyContent: "flex-start",
-    paddingBottom: 20,
-  },
-  infoContainer: {
-    alignItems: "center",
-    justifyContent: "flex-start",
-    marginTop: 15,
-    marginHorizontal: 10,
-  },
-  rowContainer: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-  },
-  stopwatchContainer: {
-    alignItems: "center",
-    justifyContent: "flex-start",
-  },
-  map: {
-    flex: 2,
-    width: "100%",
-  },
-  actionsContainer: {
-    backgroundColor: "#174667",
-    width: "100%",
-  },
-  buttonContainer: {
-    alignItems: "center",
-    justifyContent: "flex-start",
-    paddingVertical: 20,
-  },
-});
-
-const options = {
-  container: {
-    padding: 0,
-    borderRadius: 5,
-    alignItems: "center",
-  },
-  text: {
-    color: "#68C4B6",
-    marginLeft: 7,
-    fontFamily: "MPLUSRounded1c_800ExtraBold",
-    textTransform: "uppercase",
-    fontSize: 28,
-  },
-};

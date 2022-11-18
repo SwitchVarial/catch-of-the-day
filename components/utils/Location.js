@@ -11,11 +11,12 @@ export const getCurrentLocation = async () => {
   });
   const { latitude, longitude } = location.coords;
   const { accuracy } = location.coords;
-  return {
+  const currentLocation = {
     latitude: latitude,
     longitude: longitude,
     latitudeDelta: 0.05,
     longitudeDelta: 0.05,
     accuracy: accuracy,
   };
+  return currentLocation;
 };

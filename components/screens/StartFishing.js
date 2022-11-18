@@ -1,43 +1,20 @@
 import React, { useEffect, useState } from "react";
 import { StatusBar } from "expo-status-bar";
-import { StyleSheet, View } from "react-native";
+import { View } from "react-native";
 import MapView, { Marker } from "react-native-maps";
 import * as Location from "expo-location";
 import PrimaryButton from "../ui/buttons/PrimaryButton";
 import FishingDropDown from "../ui/forms/FishingDropDown";
-import { initializeApp } from "firebase/app";
-import {
-  FIREBASE_API_KEY,
-  FIREBASE_AUTH_DOMAIN,
-  FIREBASE_DATABASE_URL,
-  FIREBASE_PROJECT_ID,
-  FIREBASE_STORAGE_BUCKET,
-  FIREBASE_MESSAGIN_SENDER_ID,
-  FIREBASE_APP_ID,
-} from "@env";
-import { getDatabase, push, ref } from "firebase/database";
-import { saveTrip } from "../utils/firebase";
-
-// Your web app's Firebase configuration
-const firebaseConfig = {
-  apiKey: FIREBASE_API_KEY,
-  authDomain: FIREBASE_AUTH_DOMAIN,
-  databaseURL: FIREBASE_DATABASE_URL,
-  projectId: FIREBASE_PROJECT_ID,
-  storageBucket: FIREBASE_STORAGE_BUCKET,
-  messagingSenderId: FIREBASE_MESSAGIN_SENDER_ID,
-  appId: FIREBASE_APP_ID,
-};
-
-// Initialize Firebase
-const app = initializeApp(firebaseConfig);
-const database = getDatabase(app);
+import { database } from "../utils/FireBaseConfig";
+import { push, ref } from "firebase/database";
+import { trackingStyles } from "./Styles";
 
 export default function StartFishing({ navigation }) {
+  // All needed useStates
   const delta = 0.05;
   const initialDelta = 8;
-  const [title, setTitle] = useState("My Home");
-  const [region, setRegion] = useState({
+  const [selected, setSelected] = useState("");
+  const [startLocation, setStartLocation] = useState({
     latitude: 61.92,
     longitude: 25.74,
     latitudeDelta: initialDelta,
@@ -45,20 +22,19 @@ export default function StartFishing({ navigation }) {
     accuracy: null,
   });
 
+  // Data and props for dropdown
   const data = [
     { value: "Trolling", key: "Trolling" },
     { value: "Casting", key: "Casting" },
     { value: "Fly fishing", key: "Fly fishing" },
     { value: "Bait fishing", key: "Bait fishing" },
   ];
-
-  const [selected, setSelected] = useState("");
-
   const dropDownProps = {
     data: data,
     setSelected: setSelected,
   };
 
+  // Get current location TODO: make component
   const getLocation = async () => {
     let { status } = await Location.requestForegroundPermissionsAsync();
     if (status !== "granted") {
@@ -70,8 +46,7 @@ export default function StartFishing({ navigation }) {
     });
     const { latitude, longitude } = location.coords;
     const { accuracy } = location.coords;
-    setTitle("You are here");
-    setRegion({
+    setStartLocation({
       latitude: latitude,
       longitude: longitude,
       latitudeDelta: delta,
@@ -80,18 +55,20 @@ export default function StartFishing({ navigation }) {
     });
   };
 
+  // Start Fishing and save data to realtime database
   const startFishing = async () => {
     const startTime = Date.now();
     const tripKey = push(ref(database, "/fishing-trips"), {
-      startLocation: region,
+      startLocation: startLocation,
       startTime: startTime,
       fishingType: selected,
     }).key;
-    navigation.navigate("Fishing", { region, tripKey });
+    await navigation.navigate("Fishing", { startLocation, tripKey });
   };
 
-  const disableButton = () => {
-    const { accuracy } = region;
+  // Disable start button if loation is not set and if fishing type is not selected
+  const disableStartButton = () => {
+    const { accuracy } = startLocation;
     if (accuracy === null || selected == "") {
       return true;
     } else {
@@ -99,55 +76,39 @@ export default function StartFishing({ navigation }) {
     }
   };
 
-  const primaryButtonProps = {
+  // Props for start button
+  const startButtonProps = {
     title: "Start",
-    disabled: disableButton(),
+    disabled: disableStartButton(),
     onPress: () => startFishing(),
   };
 
+  // Use effect
   useEffect(() => {
     getLocation();
   }, []);
-
   useEffect(() => {
-    disableButton();
-  }, [region]);
+    disableStartButton();
+  }, [startLocation]);
 
   return (
-    <View style={styles.container}>
+    <View style={trackingStyles.container}>
       <StatusBar style="auto" />
-      <MapView style={styles.map} region={region} initialRegion={region}>
-        <Marker coordinate={region} title={title} />
+      <MapView
+        style={trackingStyles.map}
+        region={startLocation}
+        initialRegion={startLocation}
+      >
+        {startLocation ? (
+          <Marker coordinate={startLocation} title="You are here" />
+        ) : null}
       </MapView>
-      <View style={styles.actionsContainer}>
-        <View style={styles.buttonContainer}>
+      <View style={trackingStyles.actionsContainer}>
+        <View style={trackingStyles.buttonContainer}>
           <FishingDropDown {...dropDownProps} />
-          <PrimaryButton {...primaryButtonProps} />
+          <PrimaryButton {...startButtonProps} />
         </View>
       </View>
     </View>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: "#174667",
-    alignItems: "center",
-    justifyContent: "flex-start",
-    paddingBottom: 20,
-  },
-  map: {
-    flex: 2,
-    width: "100%",
-  },
-  actionsContainer: {
-    backgroundColor: "#174667",
-    width: "100%",
-  },
-  buttonContainer: {
-    alignItems: "center",
-    justifyContent: "flex-start",
-    paddingVertical: 20,
-  },
-});
