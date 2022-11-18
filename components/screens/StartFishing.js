@@ -8,6 +8,7 @@ import FishingDropDown from "../ui/forms/FishingDropDown";
 import { database } from "../utils/FireBaseConfig";
 import { push, ref } from "firebase/database";
 import { trackingStyles } from "./Styles";
+import { getCurrentLocation } from "../utils/Location";
 
 export default function StartFishing({ navigation }) {
   // All needed useStates
@@ -34,25 +35,10 @@ export default function StartFishing({ navigation }) {
     setSelected: setSelected,
   };
 
-  // Get current location TODO: make component
+  // Get current location
   const getLocation = async () => {
-    let { status } = await Location.requestForegroundPermissionsAsync();
-    if (status !== "granted") {
-      Alert.alert("No permission to get location");
-      return;
-    }
-    let location = await Location.getCurrentPositionAsync({
-      accuracy: Location.Accuracy.High,
-    });
-    const { latitude, longitude } = location.coords;
-    const { accuracy } = location.coords;
-    setStartLocation({
-      latitude: latitude,
-      longitude: longitude,
-      latitudeDelta: delta,
-      longitudeDelta: delta,
-      accuracy: accuracy,
-    });
+    const location = await getCurrentLocation();
+    setStartLocation(location);
   };
 
   // Start Fishing and save data to realtime database

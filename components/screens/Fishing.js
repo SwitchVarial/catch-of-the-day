@@ -2,7 +2,6 @@ import React, { useEffect, useState } from "react";
 import { StatusBar } from "expo-status-bar";
 import { View, Image } from "react-native";
 import MapView, { Marker } from "react-native-maps";
-import * as Location from "expo-location";
 import PrimaryButton from "../ui/buttons/PrimaryButton";
 import SecondaryButton from "../ui/buttons/SecondaryButton";
 import { push, ref, onValue } from "firebase/database";
@@ -48,33 +47,11 @@ export default function Fishing({ navigation, route }) {
     });
   };
 
-  console.log("Fishing tripKey: " + tripKey);
-
-  // Get current location TODO: make component
-  const getCurrentLocation = async () => {
-    let { status } = await Location.requestForegroundPermissionsAsync();
-    if (status !== "granted") {
-      Alert.alert("No permission to get location");
-      return;
-    }
-    let location = await Location.getCurrentPositionAsync({
-      accuracy: Location.Accuracy.High,
-    });
-    const { latitude, longitude } = location.coords;
-    const { accuracy } = location.coords;
-    setCurrentLocation({
-      latitude: latitude,
-      longitude: longitude,
-      latitudeDelta: 0.05,
-      longitudeDelta: 0.05,
-      accuracy: accuracy,
-    });
-  };
-
-  /*   const getLocation = async () => {
+  // Get current location
+  const getLocation = async () => {
     const location = await getCurrentLocation();
     setCurrentLocation(location);
-  }; */
+  };
 
   // Stop tracking and go to save fishint trip screen
   const stopTracking = () => {
@@ -102,7 +79,8 @@ export default function Fishing({ navigation, route }) {
   // Use effect for current location
   useEffect(() => {
     const interval = setInterval(() => {
-      getCurrentLocation();
+      // getCurrentLocation();
+      getLocation();
     }, 10000);
     return () => clearInterval(interval);
   }, []);
