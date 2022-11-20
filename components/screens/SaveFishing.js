@@ -17,13 +17,14 @@ export default function SaveFishing({ navigation, route }) {
   const elapsedTime = new Date(endTime - tripData.startTime)
     .toISOString()
     .slice(11, 19);
+  const elapsedTimeMilli = new Date(endTime - tripData.startTime).getTime();
 
   // Save fishing trip end data
   const saveTrip = async () => {
     await update(ref(database, "/fishing-trips/" + tripKey), {
       endLocation: currentLocation,
       endTime: endTime,
-      elapsedTime: elapsedTime,
+      elapsedTime: elapsedTimeMilli,
       fishCount: fishCount,
     });
     navigation.navigate("Home"),
@@ -58,8 +59,6 @@ export default function SaveFishing({ navigation, route }) {
     title: "Discard activity",
     onPress: () => discardTrip(),
   };
-
-  console.log("Save Fishing tripKey: " + tripKey);
 
   return (
     <View style={trackingStyles.container}>

@@ -42,18 +42,44 @@ export const homeProfileStyles = StyleSheet.create({
     flex: 1,
     backgroundColor: "#174667",
     alignItems: "center",
-    justifyContent: "center",
+    justifyContent: "flex-start",
+    paddingTop: 30,
   },
-  actionsContainer: {
-    flex: 2,
+  listHeaderContainer: {
+    width: "100%",
+    marginVertical: 20,
     alignItems: "center",
     justifyContent: "flex-end",
   },
+  listFooterContainer: {
+    width: "100%",
+    marginVertical: 20,
+    alignItems: "center",
+    justifyContent: "flex-start",
+    paddingBottom: 85,
+    paddingHorizontal: 20,
+  },
   listContainer: {
-    flex: 3,
     width: "100%",
     alignItems: "center",
     justifyContent: "flex-start",
+  },
+  list: {
+    width: "100%",
+    marginTop: 15,
+  },
+  rowContainer: {
+    alignContent: "center",
+    flexDirection: "row",
+    justifyContent: "space-between",
+  },
+  fishIcon: {
+    marginBottom: 5,
+  },
+  homeInfoRow: {
+    alignItems: "center",
+    justifyContent: "center",
+    margin: 20,
   },
 });
 

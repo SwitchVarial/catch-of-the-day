@@ -1,5 +1,5 @@
 import { StatusBar } from "expo-status-bar";
-import { StyleSheet, Text, View } from "react-native";
+import { Text, View } from "react-native";
 import PrimaryButton from "../ui/buttons/PrimaryButton";
 import HomeIcon from "../ui/icons/HomeIcon";
 import { homeProfileStyles } from "./Styles";

@@ -11,7 +11,6 @@ import { getCurrentLocation } from "../utils/Location";
 
 export default function StartFishing({ navigation }) {
   // All needed useStates
-  const delta = 0.05;
   const initialDelta = 8;
   const [selected, setSelected] = useState("");
   const [startLocation, setStartLocation] = useState({
