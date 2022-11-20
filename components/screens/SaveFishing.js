@@ -9,6 +9,7 @@ import { trackingStyles } from "./Styles";
 import { database } from "../utils/FireBaseConfig";
 import { ref, remove, update } from "firebase/database";
 import { CommonActions } from "@react-navigation/native";
+import { getMunicipality } from "../utils/Location";
 
 export default function SaveFishing({ navigation, route }) {
   const { tripData, fishData, fishCount, currentLocation, tripKey } =
@@ -21,11 +22,13 @@ export default function SaveFishing({ navigation, route }) {
 
   // Save fishing trip end data
   const saveTrip = async () => {
+    const city = await getMunicipality(currentLocation);
     await update(ref(database, "/fishing-trips/" + tripKey), {
       endLocation: currentLocation,
       endTime: endTime,
       elapsedTime: elapsedTimeMilli,
       fishCount: fishCount,
+      municipality: city,
     });
     navigation.navigate("Home"),
       navigation.push("Start Fishing"),

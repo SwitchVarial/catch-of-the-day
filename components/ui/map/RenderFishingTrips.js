@@ -31,7 +31,11 @@ export const renderItem = ({ item }) => {
         </View>
         <View style={styles.rowContainer}>
           <TripHeaderSubtitle label={time} />
-          <TripHeaderSubtitle label="Location" />
+          {item.municipality ? (
+            <TripHeaderSubtitle label={item.municipality} />
+          ) : (
+            <TripHeaderSubtitle label="No locality information" />
+          )}
         </View>
       </View>
       <View style={styles.tripMapContainer}>
@@ -44,7 +48,7 @@ export const renderItem = ({ item }) => {
           zoomEnabled={false}
           scrollEnabled={false}
         >
-          {item.startLocation !== undefined ? (
+          {item.startLocation == undefined ? (
             <Marker coordinate={item.startLocation} title="Start">
               <Image source={StartIcon} />
             </Marker>

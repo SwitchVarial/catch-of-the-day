@@ -26,7 +26,9 @@ export default function HomeScreen({ navigation }) {
     onValue(itemsRef, (snapshot) => {
       const data = snapshot.val();
       const fishingTrips = data
-        ? Object.keys(data).map((key) => ({ key, ...data[key] }))
+        ? Object.keys(data)
+            .map((key) => ({ key, ...data[key] }))
+            .reverse()
         : [];
       setTripsData(fishingTrips);
     });

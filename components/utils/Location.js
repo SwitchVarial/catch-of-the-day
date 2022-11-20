@@ -20,3 +20,15 @@ export const getCurrentLocation = async () => {
   };
   return currentLocation;
 };
+
+export const getMunicipality = async (location) => {
+  let { status } = await Location.requestForegroundPermissionsAsync();
+  if (status !== "granted") {
+    Alert.alert("No permission to get location");
+    return;
+  }
+  const { latitude, longitude } = location;
+  const address = await Location.reverseGeocodeAsync({ latitude, longitude });
+  const municipality = address[0].city;
+  return municipality;
+};
