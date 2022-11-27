@@ -15,7 +15,7 @@ export default function ProfileScreen({ navigation }) {
       <Text>This is ProfileScreen</Text>
       <PrimaryButton {...buttonProps} />
       <HomeIcon />
-      <StatusBar style="auto" />
+      <StatusBar style="light" />
     </View>
   );
 }

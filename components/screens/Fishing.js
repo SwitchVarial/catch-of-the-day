@@ -122,7 +122,7 @@ export default function Fishing({ navigation, route }) {
   } else {
     return (
       <View style={sharedScreenStyles.container}>
-        <StatusBar style="auto" />
+        <StatusBar style="light" />
         <MapView
           style={sharedScreenStyles.map}
           region={currentLocation}

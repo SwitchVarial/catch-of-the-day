@@ -19,7 +19,7 @@ export default function Trip({ route }) {
   }
   return (
     <View style={sharedScreenStyles.container}>
-      <StatusBar style="auto" />
+      <StatusBar style="light" />
       {item ? (
         <MapView
           style={sharedScreenStyles.map}

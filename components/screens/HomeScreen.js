@@ -88,7 +88,7 @@ export default function HomeScreen({ navigation, route }) {
 
   return (
     <View style={homeProfileStyles.container}>
-      <StatusBar style="auto" />
+      <StatusBar style="light" />
       <View style={homeProfileStyles.listContainer}>
         <FlatList
           style={homeProfileStyles.list}

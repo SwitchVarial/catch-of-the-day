@@ -77,7 +77,7 @@ export default function StartFishing({ navigation }) {
 
   return (
     <View style={sharedScreenStyles.container}>
-      <StatusBar style="auto" />
+      <StatusBar style="light" />
       <MapView
         style={sharedScreenStyles.map}
         region={startLocation}

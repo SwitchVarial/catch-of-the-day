@@ -65,7 +65,7 @@ export default function SaveFishing({ navigation, route }) {
 
   return (
     <View style={sharedScreenStyles.container}>
-      <StatusBar style="auto" />
+      <StatusBar style="light" />
       {tripData ? (
         <MapView
           style={sharedScreenStyles.map}
