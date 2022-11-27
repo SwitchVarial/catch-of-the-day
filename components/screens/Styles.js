@@ -1,6 +1,6 @@
 import { StyleSheet } from "react-native";
 
-export const trackingStyles = StyleSheet.create({
+export const sharedScreenStyles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: "#174667",
@@ -13,6 +13,11 @@ export const trackingStyles = StyleSheet.create({
     justifyContent: "flex-start",
     marginTop: 15,
     marginHorizontal: 10,
+  },
+  infoAreaContainer: {
+    alignItems: "center",
+    justifyContent: "flex-start",
+    marginBottom: 20,
   },
   rowContainer: {
     flexDirection: "row",
@@ -34,6 +39,14 @@ export const trackingStyles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "flex-start",
     paddingVertical: 20,
+  },
+  iconContainer: {
+    alignItems: "center",
+    justifyContent: "center",
+    height: 25,
+  },
+  icon: {
+    marginBottom: 5,
   },
 });
 
@@ -72,9 +85,6 @@ export const homeProfileStyles = StyleSheet.create({
     alignContent: "center",
     flexDirection: "row",
     justifyContent: "space-between",
-  },
-  fishIcon: {
-    marginBottom: 5,
   },
   homeInfoRow: {
     alignItems: "center",

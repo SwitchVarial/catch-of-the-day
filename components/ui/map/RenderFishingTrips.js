@@ -76,7 +76,7 @@ export const renderItem = ({ item }) => {
                 })
             : null}
           {item.endLocation !== undefined ? (
-            <Marker coordinate={item.endLocation} title="Start">
+            <Marker coordinate={item.endLocation} title="End">
               <Image source={EndIcon} />
             </Marker>
           ) : null}

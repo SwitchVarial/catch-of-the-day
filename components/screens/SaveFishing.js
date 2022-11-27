@@ -5,7 +5,7 @@ import MapView, { Marker } from "react-native-maps";
 import FishButton from "../../assets/FishButton.png";
 import StartIcon from "../../assets/StartIcon.png";
 import EndIcon from "../../assets/EndIcon.png";
-import { trackingStyles } from "./Styles";
+import { sharedScreenStyles } from "./Styles";
 import { database } from "../utils/FireBaseConfig";
 import { ref, remove, update } from "firebase/database";
 import { CommonActions } from "@react-navigation/native";
@@ -64,11 +64,11 @@ export default function SaveFishing({ navigation, route }) {
   };
 
   return (
-    <View style={trackingStyles.container}>
+    <View style={sharedScreenStyles.container}>
       <StatusBar style="auto" />
       {tripData ? (
         <MapView
-          style={trackingStyles.map}
+          style={sharedScreenStyles.map}
           region={tripData.startLocation}
           initialRegion={tripData.startLocation}
         >
@@ -98,20 +98,20 @@ export default function SaveFishing({ navigation, route }) {
           </Marker>
         </MapView>
       ) : (
-        <MapView style={trackingStyles.map} />
+        <MapView style={sharedScreenStyles.map} />
       )}
-      <View style={trackingStyles.rowContainer}>
-        <View style={trackingStyles.infoContainer}>
+      <View style={sharedScreenStyles.rowContainer}>
+        <View style={sharedScreenStyles.infoContainer}>
           <InfoText label={fishCount} />
           <LabelText label="Fish caught" />
         </View>
-        <View style={trackingStyles.infoContainer}>
+        <View style={sharedScreenStyles.infoContainer}>
           <InfoText label={elapsedTime} />
           <LabelText label="Duration" />
         </View>
       </View>
-      <View style={trackingStyles.actionsContainer}>
-        <View style={trackingStyles.buttonContainer}>
+      <View style={sharedScreenStyles.actionsContainer}>
+        <View style={sharedScreenStyles.buttonContainer}>
           <PrimaryButton {...saveButtonProps} />
           <SecondaryButton {...discardButtonProps} />
         </View>

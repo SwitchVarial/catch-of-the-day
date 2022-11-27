@@ -4,6 +4,7 @@ import HomeScreen from "../../screens/HomeScreen";
 import ProfileScreen from "../../screens/ProfileScreen";
 import Icon from "../icons/Icon";
 import TrackingNavigation from "./TrackingNavigation";
+import TripNavigation from "./TripNavigation";
 
 const screenOptions = ({ route }) => ({
   headerShown: false,
@@ -71,6 +72,16 @@ export default function BottomNavigation() {
         }}
         name="StartFishing"
         component={TrackingNavigation}
+      />
+      <Tab.Screen
+        options={{
+          tabBarLabelStyle: { color: "white" },
+          title: "Trip",
+          tabBarStyle: { display: "none" },
+          tabBarButton: () => null,
+        }}
+        name="Trip"
+        component={TripNavigation}
       />
       <Tab.Screen
         options={{ tabBarLabelStyle: { color: "white" } }}

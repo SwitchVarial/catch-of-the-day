@@ -1,16 +1,16 @@
 import React, { useState, useEffect } from "react";
 import { StatusBar } from "expo-status-bar";
-import { FlatList, View, Image } from "react-native";
+import { FlatList, View, Image, TouchableOpacity } from "react-native";
 import PrimaryButton from "../ui/buttons/PrimaryButton";
 import { database } from "../utils/FireBaseConfig";
 import { ref, onValue } from "firebase/database";
-import { homeProfileStyles } from "./Styles";
+import { homeProfileStyles, sharedScreenStyles } from "./Styles";
 import { renderItem, listSeparator } from "../ui/map/RenderFishingTrips";
 import InfoText from "../ui/texts/InfoText";
 import FishIcon from "../../assets/FishIcon.png";
 import TimeIcon from "../../assets/TimeIcon.png";
 
-export default function HomeScreen({ navigation }) {
+export default function HomeScreen({ navigation, route }) {
   // All needed useStates
   const [tripsData, setTripsData] = useState([]);
 
@@ -61,12 +61,16 @@ export default function HomeScreen({ navigation }) {
     <View style={homeProfileStyles.listHeaderContainer}>
       <View style={homeProfileStyles.rowContainer}>
         <View style={homeProfileStyles.homeInfoRow}>
-          <Image source={FishIcon} style={homeProfileStyles.fishIcon} />
+          <View style={sharedScreenStyles.iconContainer}>
+            <Image source={FishIcon} style={sharedScreenStyles.icon} />
+          </View>
           <InfoText label={fishCount} />
           <LabelText label="Fish caught" />
         </View>
         <View style={homeProfileStyles.homeInfoRow}>
-          <Image source={TimeIcon} style={homeProfileStyles.fishIcon} />
+          <View style={sharedScreenStyles.iconContainer}>
+            <Image source={TimeIcon} style={homeProfileStyles.icon} />
+          </View>
           <InfoText label={elapsedTime} />
           <LabelText label="Hours spent fishing" />
         </View>
@@ -89,7 +93,18 @@ export default function HomeScreen({ navigation }) {
         <FlatList
           style={homeProfileStyles.list}
           data={tripsData}
-          renderItem={renderItem}
+          renderItem={({ item }) => (
+            <TouchableOpacity
+              onPress={() =>
+                navigation.navigate("Trip", {
+                  screen: "Trip Details",
+                  params: { item: item },
+                })
+              }
+            >
+              {renderItem({ item })}
+            </TouchableOpacity>
+          )}
           ListHeaderComponent={ListHeader}
           ListFooterComponent={ListFooter}
           ItemSeparatorComponent={listSeparator}

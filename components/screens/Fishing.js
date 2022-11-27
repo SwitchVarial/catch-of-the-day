@@ -15,7 +15,7 @@ import InfoText from "../ui/texts/InfoText";
 import { database } from "../utils/FireBaseConfig";
 import FishButton from "../../assets/FishButton.png";
 import StartIcon from "../../assets/StartIcon.png";
-import { trackingStyles, stopwatchOptions } from "./Styles";
+import { sharedScreenStyles, stopwatchOptions } from "./Styles";
 import { getCurrentLocation } from "../utils/Location";
 
 export default function Fishing({ navigation, route }) {
@@ -121,10 +121,10 @@ export default function Fishing({ navigation, route }) {
     return;
   } else {
     return (
-      <View style={trackingStyles.container}>
+      <View style={sharedScreenStyles.container}>
         <StatusBar style="auto" />
         <MapView
-          style={trackingStyles.map}
+          style={sharedScreenStyles.map}
           region={currentLocation}
           initialRegion={currentLocation}
         >
@@ -154,12 +154,12 @@ export default function Fishing({ navigation, route }) {
               })
             : null}
         </MapView>
-        <View style={trackingStyles.rowContainer}>
-          <View style={trackingStyles.infoContainer}>
+        <View style={sharedScreenStyles.rowContainer}>
+          <View style={sharedScreenStyles.infoContainer}>
             <InfoText label={fishCount} />
             <LabelText label="Fish caught" />
           </View>
-          <View style={trackingStyles.infoContainer}>
+          <View style={sharedScreenStyles.infoContainer}>
             <Stopwatch
               start={isStopwatchStart}
               reset={resetStopwatch}
@@ -168,8 +168,8 @@ export default function Fishing({ navigation, route }) {
             <LabelText label="Duration" />
           </View>
         </View>
-        <View style={trackingStyles.actionsContainer}>
-          <View style={trackingStyles.buttonContainer}>
+        <View style={sharedScreenStyles.actionsContainer}>
+          <View style={sharedScreenStyles.buttonContainer}>
             <PrimaryButton {...addFishButtonProps} />
             <SecondaryButton {...stopButtonProps} />
           </View>

@@ -6,7 +6,7 @@ import PrimaryButton from "../ui/buttons/PrimaryButton";
 import FishingDropDown from "../ui/forms/FishingDropDown";
 import { database } from "../utils/FireBaseConfig";
 import { push, ref } from "firebase/database";
-import { trackingStyles } from "./Styles";
+import { sharedScreenStyles } from "./Styles";
 import { getCurrentLocation } from "../utils/Location";
 
 export default function StartFishing({ navigation }) {
@@ -76,10 +76,10 @@ export default function StartFishing({ navigation }) {
   }, [startLocation]);
 
   return (
-    <View style={trackingStyles.container}>
+    <View style={sharedScreenStyles.container}>
       <StatusBar style="auto" />
       <MapView
-        style={trackingStyles.map}
+        style={sharedScreenStyles.map}
         region={startLocation}
         initialRegion={startLocation}
       >
@@ -87,8 +87,8 @@ export default function StartFishing({ navigation }) {
           <Marker coordinate={startLocation} title="You are here" />
         ) : null}
       </MapView>
-      <View style={trackingStyles.actionsContainer}>
-        <View style={trackingStyles.buttonContainer}>
+      <View style={sharedScreenStyles.actionsContainer}>
+        <View style={sharedScreenStyles.buttonContainer}>
           <FishingDropDown {...dropDownProps} />
           <PrimaryButton {...startButtonProps} />
         </View>
