@@ -3,16 +3,16 @@ import {
   useFonts,
   MPLUSRounded1c_800ExtraBold,
 } from "@expo-google-fonts/m-plus-rounded-1c";
-import { StyleSheet } from "react-native";
+import { secondaryButtonStyles } from "./Styles";
 
 export default SecondaryButton = (props) => {
   const buttonProps = {
     title: props.title,
     type: "solid",
     color: "#174667",
-    buttonStyle: styles.buttonStyle,
-    containerStyle: styles.buttonContainerStyle,
-    titleStyle: styles.buttonTitle,
+    buttonStyle: secondaryButtonStyles.buttonStyle,
+    containerStyle: secondaryButtonStyles.buttonContainerStyle,
+    titleStyle: secondaryButtonStyles.buttonTitle,
     onPress: props.onPress,
   };
 
@@ -26,24 +26,3 @@ export default SecondaryButton = (props) => {
     return <Button {...buttonProps} />;
   }
 };
-
-const styles = StyleSheet.create({
-  buttonStyle: {
-    minWidth: "90%",
-    alignItems: "center",
-    justifyContent: "center",
-  },
-  buttonTitle: {
-    marginHorizontal: 5,
-    color: "#68C4B6",
-    fontFamily: "MPLUSRounded1c_800ExtraBold",
-    textTransform: "uppercase",
-    fontSize: 22,
-  },
-  buttonContainerStyle: {
-    margin: 5,
-    borderRadius: 40,
-    borderColor: "#68C4B6",
-    borderWidth: 2,
-  },
-});

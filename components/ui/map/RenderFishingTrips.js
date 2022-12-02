@@ -1,5 +1,5 @@
 import React from "react";
-import { StyleSheet, View, Image } from "react-native";
+import { View, Image } from "react-native";
 import TripHeaderTitle from "../texts/TripHeaderTitle";
 import TripHeaderSubtitle from "../texts/TripHeaderSubtitle";
 import MapView, { Marker } from "react-native-maps";
@@ -8,6 +8,7 @@ import StartIcon from "../../../assets/StartIcon.png";
 import EndIcon from "../../../assets/EndIcon.png";
 import FishIcon from "../../../assets/FishIcon.png";
 import TimeIcon from "../../../assets/TimeIcon.png";
+import { renderFishigTripstyles } from "./Styles";
 
 export const renderItem = ({ item }) => {
   const time = new Date(item.startTime).toLocaleString().substring(0, 10);
@@ -23,13 +24,13 @@ export const renderItem = ({ item }) => {
   }
 
   return (
-    <View style={styles.tripContainer}>
-      <View style={styles.tripHeaderContainer}>
-        <View style={styles.rowContainer}>
+    <View style={renderFishigTripstyles.tripContainer}>
+      <View style={renderFishigTripstyles.tripHeaderContainer}>
+        <View style={renderFishigTripstyles.rowContainer}>
           <TripHeaderTitle label="User Name" />
           <TripHeaderTitle label={item.fishingType} />
         </View>
-        <View style={styles.rowContainer}>
+        <View style={renderFishigTripstyles.rowContainer}>
           <TripHeaderSubtitle label={time} />
           {item.municipality ? (
             <TripHeaderSubtitle label={item.municipality} />
@@ -38,9 +39,9 @@ export const renderItem = ({ item }) => {
           )}
         </View>
       </View>
-      <View style={styles.tripMapContainer}>
+      <View style={renderFishigTripstyles.tripMapContainer}>
         <MapView
-          style={styles.mapStyle}
+          style={renderFishigTripstyles.mapStyle}
           region={item.startLocation}
           initialRegion={item.startLocation}
           pitchEnabled={false}
@@ -82,14 +83,14 @@ export const renderItem = ({ item }) => {
           ) : null}
         </MapView>
       </View>
-      <View style={styles.tripFooterContainer}>
-        <View style={styles.rowContainer}>
-          <View style={styles.rowContainer}>
-            <Image source={FishIcon} style={styles.iconStyle} />
+      <View style={renderFishigTripstyles.tripFooterContainer}>
+        <View style={renderFishigTripstyles.rowContainer}>
+          <View style={renderFishigTripstyles.rowContainer}>
+            <Image source={FishIcon} style={renderFishigTripstyles.iconStyle} />
             <TripHeaderSubtitle label={fishCount + " fish caught"} />
           </View>
-          <View style={styles.rowContainer}>
-            <Image source={TimeIcon} style={styles.iconStyle} />
+          <View style={renderFishigTripstyles.rowContainer}>
+            <Image source={TimeIcon} style={renderFishigTripstyles.iconStyle} />
             <TripHeaderSubtitle label={elapsedTime} />
           </View>
         </View>
@@ -99,51 +100,5 @@ export const renderItem = ({ item }) => {
 };
 
 export const listSeparator = () => {
-  return <View style={styles.separator} />;
+  return <View style={renderFishigTripstyles.separator} />;
 };
-
-const styles = StyleSheet.create({
-  separator: {
-    height: 15,
-    width: "100%",
-    backgroundColor: "#174667",
-  },
-  tripContainer: {
-    width: "100%",
-    height: 340,
-    backgroundColor: "#0B3553",
-  },
-  tripHeaderContainer: {
-    width: "100%",
-    height: 60,
-    paddingHorizontal: 20,
-    paddingVertical: 10,
-  },
-  rowContainer: {
-    alignContent: "center",
-    flexDirection: "row",
-    justifyContent: "space-between",
-  },
-  headerTitle: {
-    fontSize: 16,
-    color: "white",
-  },
-  tripMapContainer: {
-    width: "100%",
-    height: 240,
-    backgroundColor: "grey",
-  },
-  tripFooterContainer: {
-    width: "100%",
-    height: 40,
-    paddingHorizontal: 20,
-    paddingVertical: 10,
-  },
-  iconStyle: {
-    marginRight: 10,
-  },
-  mapStyle: {
-    width: "100%",
-    height: 240,
-  },
-});

@@ -3,20 +3,20 @@ import {
   useFonts,
   MPLUSRounded1c_800ExtraBold,
 } from "@expo-google-fonts/m-plus-rounded-1c";
-import { StyleSheet } from "react-native";
+import { primaryButtonStyles } from "./Styles";
 
 export default PrimaryButton = (props) => {
   const buttonProps = {
     title: props.title,
     type: "solid",
     color: "#FFA700",
-    buttonStyle: styles.buttonStyle,
-    containerStyle: styles.buttonContainerStyle,
-    titleStyle: styles.buttonTitle,
+    buttonStyle: primaryButtonStyles.buttonStyle,
+    containerStyle: primaryButtonStyles.buttonContainerStyle,
+    titleStyle: primaryButtonStyles.buttonTitle,
     onPress: props.onPress,
     disabled: props.disabled,
-    disabledStyle: styles.buttonDisabledStyle,
-    disabledTitleStyle: styles.buttonDisabledTitleStyle,
+    disabledStyle: primaryButtonStyles.buttonDisabledStyle,
+    disabledTitleStyle: primaryButtonStyles.buttonDisabledTitleStyle,
   };
 
   let [fontsLoaded] = useFonts({
@@ -29,29 +29,3 @@ export default PrimaryButton = (props) => {
     return <Button {...buttonProps} />;
   }
 };
-
-const styles = StyleSheet.create({
-  buttonStyle: {
-    minWidth: "90%",
-    alignItems: "center",
-    justifyContent: "center",
-    padding: 12,
-  },
-  buttonTitle: {
-    marginHorizontal: 5,
-    color: "#0B3553",
-    fontFamily: "MPLUSRounded1c_800ExtraBold",
-    textTransform: "uppercase",
-    fontSize: 22,
-  },
-  buttonContainerStyle: {
-    margin: 5,
-    borderRadius: 40,
-  },
-  buttonDisabledStyle: {
-    backgroundColor: "#98732D",
-  },
-  buttonDisabledTitleStyle: {
-    color: "#0B3553",
-  },
-});

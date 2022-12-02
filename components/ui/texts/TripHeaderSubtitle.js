@@ -3,13 +3,14 @@ import {
   useFonts,
   MPLUSRounded1c_500Medium,
 } from "@expo-google-fonts/m-plus-rounded-1c";
-import { StyleSheet } from "react-native";
+import { tripHeaderSubtitleStyles } from "./Styles";
 
 export default TripHeaderSubtitle = (props) => {
   const textProps = {
-    style: styles.textStyle,
+    style: tripHeaderSubtitleStyles.textStyle,
     label: props.label,
   };
+
   let [fontsLoaded] = useFonts({
     MPLUSRounded1c_500Medium,
   });
@@ -20,11 +21,3 @@ export default TripHeaderSubtitle = (props) => {
     return <Text {...textProps} />;
   }
 };
-
-const styles = StyleSheet.create({
-  textStyle: {
-    color: "white",
-    fontFamily: "MPLUSRounded1c_500Medium",
-    fontSize: 12,
-  },
-});

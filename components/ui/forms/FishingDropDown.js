@@ -6,6 +6,7 @@ import {
 } from "@expo-google-fonts/m-plus-rounded-1c";
 import { View } from "react-native";
 import ChevronIcon from "../icons/ChevronIcon";
+import { dropdownStyles } from "./Styles";
 
 export default FishingDropDown = (props) => {
   const dropdownProps = {
@@ -30,32 +31,10 @@ export default FishingDropDown = (props) => {
           placeholder="Fishing type"
           search={false}
           arrowicon={<ChevronIcon />}
-          boxStyles={{
-            margin: 5,
-            borderRadius: 40,
-            borderColor: "#68C4B6",
-            borderWidth: 2,
-            alignItems: "center",
-            justifyContent: "space-between",
-          }}
-          inputStyles={{
-            color: "#68C4B6",
-            fontFamily: "MPLUSRounded1c_800ExtraBold",
-            textTransform: "uppercase",
-            fontSize: 22,
-          }}
-          dropdownStyles={{
-            margin: 5,
-            marginTop: 5,
-            borderRadius: 40,
-            borderColor: "#68C4B6",
-            borderWidth: 2,
-          }}
-          dropdownTextStyles={{
-            color: "#68C4B6",
-            fontFamily: "MPLUSRounded1c_500Medium",
-            fontSize: 18,
-          }}
+          boxStyles={dropdownStyles.boxStyle}
+          inputStyles={dropdownStyles.inputStyle}
+          dropdownStyles={dropdownStyles.dropdownStyle}
+          dropdownTextStyles={dropdownStyles.dropdownTextStyle}
         />
       </View>
     );
